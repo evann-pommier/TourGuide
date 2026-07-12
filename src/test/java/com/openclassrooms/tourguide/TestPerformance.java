@@ -1,5 +1,6 @@
 package com.openclassrooms.tourguide;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class TestPerformance {
 
 		List<CompletableFuture<VisitedLocation>> futures = allUsers.stream()
 				.map(tourGuideService::trackUserLocationAsync)
-				.collect(Collectors.toList());
+				.toList();
 		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
 		stopWatch.stop();
@@ -93,11 +94,11 @@ public class TestPerformance {
 
 		List<CompletableFuture<Void>> futures = allUsers.stream()
 				.map(rewardsService::calculateRewardsAsync)
-				.collect(Collectors.toList());
+				.toList();
 		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
 		for (User user : allUsers) {
-			assertTrue(user.getUserRewards().size() > 0);
+            assertFalse(user.getUserRewards().isEmpty());
 		}
 		stopWatch.stop();
 		tourGuideService.tracker.stopTracking();
